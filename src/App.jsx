@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 
+// Storing the drum pads in an array of objects
 const drumPads = [
 	{
 		key: "Q",
@@ -51,9 +52,11 @@ const drumPads = [
 	},
 ];
 
+// * DrumPad component to render each drum pad
 const DrumPad = ({ drumPad, setPressedKey }) => {
 	const [active, setActive] = useState(false);
 
+	// Adding event listener to the document to listen for keypresses
 	useEffect(() => {
 		document.addEventListener("keydown", handleKeyPress);
 		return () => {
@@ -61,6 +64,8 @@ const DrumPad = ({ drumPad, setPressedKey }) => {
 		};
 	}, []);
 
+	// Function to handle keypresses
+	// If the key pressed is the same as the key of the drum pad, then play the audio
 	const handleKeyPress = (event) => {
 		const key = event.key.toUpperCase();
 		if (key === drumPad.key) {
@@ -68,14 +73,19 @@ const DrumPad = ({ drumPad, setPressedKey }) => {
 		}
 	};
 
+	// Function to play the audio
 	const playAudio = () => {
+		// Getting the audio element by id
 		const audio = document.getElementById(drumPad.key);
+		// Using setActive to change the border color of the drum pad
 		setActive(true);
 		setTimeout(() => {
 			setActive(false);
 		}, 200);
+		// Playing the audio
 		audio.currentTime = 0;
 		audio.play();
+		// Setting the pressed key to display in the display div
 		setPressedKey(drumPad.id.replace(/-/g, " "));
 	};
 
@@ -118,6 +128,7 @@ function App() {
 						{pressedKey}
 					</h3>
 					<div className="mx-auto mb-4 grid w-max grid-cols-3">
+						{/* Mapping through the drumPads array and rendering a DrumPad component for each drum pad */}
 						{drumPads.map((drumPad) => {
 							return (
 								<DrumPad
